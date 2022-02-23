@@ -1,6 +1,7 @@
 const Appliaction = require('ee-core').Appliaction;
 const { app } = require('electron');
 
+
 class Main extends Appliaction {
 
   constructor() {
@@ -25,6 +26,15 @@ class Main extends Appliaction {
     // const preload = require('./electron/preload');
     // preload(app);
 
+  }
+
+  startEggCluster (options) {
+    return new Promise((resolve, reject) => {
+      console.log('op:', options);
+      startCluster(options, function(){
+        resolve('success');
+      });
+    });
   }
 
   /**
