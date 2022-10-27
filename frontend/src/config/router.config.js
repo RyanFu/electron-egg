@@ -2,12 +2,8 @@
  * 基础路由
  * @type { *[] }
  */
- import {AppSider, Menu} from '@/layouts'
+import {AppSider, Menu} from '@/layouts'
 
- const RouteView = {
-   name: 'RouteView',
-   render: (h) => h('router-view')
- }
 export const constantRouterMap = [
   {
     path: '/',
@@ -17,26 +13,28 @@ export const constantRouterMap = [
         path: '/base',
         name: 'Base',
         component: Menu,
+        props: { id: 'base' },
+        redirect: { name: 'BaseFileIndex' },
         children: [
-          {
-            path: '/base/index',
-            name: 'BaseIndex',
-            component: () => import('@/views/base/file/Index')
-          },
           {
             path: '/base/file/index',
             name: 'BaseFileIndex',
             component: () => import('@/views/base/file/Index')
           },
           {
-            path: '/base/socket/index',
-            name: 'BaseSocketIndex',
-            component: () => import('@/views/base/socket/Index')
+            path: '/base/socket/ipc',
+            name: 'BaseSocketIpc',
+            component: () => import('@/views/base/socket/Ipc')
           },
           {
             path: '/base/db/index',
             name: 'BaseDBIndex',
             component: () => import('@/views/base/db/Index')
+          },
+          {
+            path: '/base/sqlitedb/index',
+            name: 'BaseSqliteDBIndex',
+            component: () => import('@/views/base/sqlitedb/Index')
           },
           {
             path: '/base/windowview/index',
@@ -69,10 +67,20 @@ export const constantRouterMap = [
             component: () => import('@/views/base/theme/Index')
           },                               
           {
-            path: '/base/software/open',
+            path: '/base/software/index',
             name: 'BaseSoftwareIndex',
             component: () => import('@/views/base/software/Index')
           },
+          {
+            path: '/base/socket/httpserver',
+            name: 'BaseSocketHttpServer',
+            component: () => import('@/views/base/socket/HttpServer')
+          },
+          {
+            path: '/base/socket/socketserver',
+            name: 'BaseSocketSocketServer',
+            component: () => import('@/views/base/socket/SocketServer')
+          },          
           {
             path: '/base/system/index',
             name: 'BaseSystemIndex',
@@ -91,9 +99,18 @@ export const constantRouterMap = [
         ]  
       },
       {
-        path: '/other/index',
-        name: 'OtherIndex',
-        component: () => import('@/views/other/Index')
+        path: '/other',
+        name: 'Other',
+        component: Menu,
+        props: { id: 'other' },
+        redirect: { name: 'OtherTestIndex' },
+        children: [
+          {
+            path: '/other/test/index',
+            name: 'OtherTestIndex',
+            component: () => import('@/views/other/test/Index')
+          },
+        ] 
       }
     ]
   }

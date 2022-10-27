@@ -11,6 +11,7 @@ const electronApp = require('electron').app;
 const {dialog, webContents, shell, BrowserWindow, BrowserView, 
   Notification, powerMonitor, screen, nativeTheme} = require('electron');
 const autoLaunchManager = require('../library/autoLaunch');
+const dayjs = require('dayjs');
 
 let myTimer = null;
 let browserViewObj = null;
@@ -29,7 +30,7 @@ class ExampleController extends Controller {
   /**
    * 所有方法接收两个参数
    * @param args 前端传的参数
-   * @param event - IpcMainEvent 文档：https://www.electronjs.org/docs/latest/api/structures/ipc-main-event
+   * @param event - ipc通信时才有值。invoke()方法时，event == IpcMainInvokeEvent; send()/sendSync()方法时，event == IpcMainEvent
    */
 
   /**
@@ -38,6 +39,10 @@ class ExampleController extends Controller {
   async test () {
     const result = await this.service.example.test('electron');
 
+    let tmpDir = Utils.getLogDir();
+    console.log('tmpDir:', tmpDir);
+
+    console.log('this.app.request:', this.app.request.query);
 
     return result;
   }
@@ -76,14 +81,36 @@ class ExampleController extends Controller {
   }
 
   /**
-   * hello
-   */
-  hello (args) {
-    let newMsg = args + " +1";
-    let content = '';
-    content = '收到：' + args + '，返回：' + newMsg;
+   * sqlite数据库操作
+   */   
+  async sqlitedbOperation(args) {
+    const { service } = this;
+    const paramsObj = args;
+    //console.log('eeeee paramsObj:', paramsObj);
+    const data = {
+      action: paramsObj.action,
+      result: null,
+      all_list: []
+    };
+    
+    switch (paramsObj.action) {
+      case 'add' :
+        data.result = await service.storage.addTestDataSqlite(paramsObj.info);;
+        break;
+      case 'del' :
+        data.result = await service.storage.delTestDataSqlite(paramsObj.delete_name);;
+        break;
+      case 'update' :
+        data.result = await service.storage.updateTestDataSqlite(paramsObj.update_name, paramsObj.update_age);
+        break;
+      case 'get' :
+        data.result = await service.storage.getTestDataSqlite(paramsObj.search_age);
+        break;
+    }
 
-    return content;
+    data.all_list = await service.storage.getAllTestDataSqlite();
+
+    return data;
   }
 
   /**
@@ -143,40 +170,6 @@ class ExampleController extends Controller {
     const dir = electronApp.getPath(args.id);
     shell.openPath(dir);
     return true;
-  }
-
-  /**
-   * 长消息 - 开始
-   */
-  socketMessageStart (args, event) {
-    // 每隔1秒，向前端页面发送消息
-    // 用定时器模拟
-    
-    // 前端ipc频道 channel
-    const channel = 'controller.example.socketMessageStart';
-    myTimer = setInterval(function(e, c, msg) {
-      let timeNow = Date.now();
-      let data = msg + ':' + timeNow;
-      e.reply(`${c}`, data)
-    }, 1000, event, channel, args)
-
-    return '开始了'
-  }
-
-  /**
-   * 长消息 - 停止
-   */
-  socketMessageStop () {
-    clearInterval(myTimer);
-    return '停止了'
-  }
-
-  /**
-   * 执行js语句
-   */
-  executeJS (args) {
-    let jscode = `(()=>{alert('${args}');return 'fromJs:${args}';})()`;
-    return webContents.fromId(1).executeJavaScript(jscode);
   }
 
   /**
@@ -415,15 +408,9 @@ class ExampleController extends Controller {
       return false;
     }
 
-    // 资源路径不同
-    let softwarePath = '';
-    if (electronApp.isPackaged) {
-      // 打包后
-      softwarePath = path.join(electronApp.getAppPath(), "..", "extraResources", softName);
-    } else {
-      // 打包前
-      softwarePath = path.join(electronApp.getAppPath(), "build", "extraResources", softName);
-    }
+    let softwarePath = path.join(Utils.getExtraResourcesDir(), softName);
+    this.app.logger.info('[openSoftware] softwarePath:', softwarePath);
+
     // 检查程序是否存在
     if (!fs.existsSync(softwarePath)) {
       return false;
@@ -528,6 +515,120 @@ class ExampleController extends Controller {
 
     // return uploadRes;
   }
+
+  /**
+   * 检测http服务是否开启
+   */ 
+  async checkHttpServer () {
+    const httpServerConfig = this.app.config.httpServer;
+    const url = httpServerConfig.protocol + httpServerConfig.host + ':' + httpServerConfig.port;
+
+    const data = {
+      enable: httpServerConfig.enable,
+      server: url
+    }
+    return data;
+  }
+
+  /**
+   * 一个http请求访问此方法
+   */ 
+  async doHttpRequest () {
+    // http方法
+    const method = this.app.request.method;
+    // http get 参数
+    let params = this.app.request.query;
+    params = (params instanceof Object) ? params : JSON.parse(JSON.stringify(params));
+    // http post 参数
+    const body = this.app.request.body;
+
+    const httpInfo = {
+      method,
+      params,
+      body
+    }
+    console.log('httpInfo:', httpInfo);
+
+    if (!body.id) {
+      return false;
+    }
+    const dir = electronApp.getPath(body.id);
+    shell.openPath(dir);
+    
+    return true;
+  } 
+ 
+  /**
+   * 一个socket io请求访问此方法
+   */ 
+  async doSocketRequest (args) {
+    if (!args.id) {
+      return false;
+    }
+    const dir = electronApp.getPath(args.id);
+    shell.openPath(dir);
+    
+    return true;
+  }
+  
+  /**
+   * 异步消息类型
+   * @param args 前端传的参数
+   * @param event - IpcMainInvokeEvent 文档：https://www.electronjs.org/zh/docs/latest/api/structures/ipc-main-invoke-event
+   */ 
+   async ipcInvokeMsg (args, event) {
+    let timeNow = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    const data = args + ' - ' + timeNow;
+    
+    return data;
+  }  
+
+  /**
+   * 同步消息类型
+   * @param args 前端传的参数
+   * @param event - IpcMainEvent 文档：https://www.electronjs.org/docs/latest/api/structures/ipc-main-event
+   */ 
+  async ipcSendSyncMsg (args) {
+    let timeNow = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    const data = args + ' - ' + timeNow;
+    
+    return data;
+  }  
+
+  /**
+   * 双向异步通信
+   * @param args 前端传的参数
+   * @param event - IpcMainEvent 文档：https://www.electronjs.org/docs/latest/api/structures/ipc-main-event
+   */
+  ipcSendMsg (args, event) {
+    // 前端ipc频道 channel
+    const channel = 'controller.example.ipcSendMsg';
+
+    if (args.type == 'start') {
+      // 每隔1秒，向前端页面发送消息
+      // 用定时器模拟
+      myTimer = setInterval(function(e, c, msg) {
+        let timeNow = Date.now();
+        let data = msg + ':' + timeNow;
+        e.reply(`${c}`, data)
+      }, 1000, event, channel, args.content)
+
+      return '开始了'
+    } else if (args.type == 'end') {
+      clearInterval(myTimer);
+      return '停止了'    
+    } else {
+      return 'ohther'
+    }
+  }
+
+  /**
+   * 测试接口
+   */ 
+  hello (args) {
+    console.log('hello ', args);
+  }   
 }
 
+ExampleController.toString = () => '[class ExampleController]';
 module.exports = ExampleController;

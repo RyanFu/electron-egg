@@ -1,79 +1,86 @@
-# EE框架2.0 
+# electron-egg framework 2.0 
 [![star](https://gitee.com/wallace5303/electron-egg/badge/star.svg?theme=gvp)](https://gitee.com/wallace5303/electron-egg/stargazers)
 
 <div align=center>
-<img src="https://kaka996.coding.net/p/resource/d/tx-resource/git/raw/master/img/electron-egg/logo.png" width="150" height="150" />
+<img src="https://wallace5303.gitee.io/ee/images/electron-egg/logo.png" width="150" height="150" />
 </div>
 
-一个入门简单、跨平台的桌面软件开发框架。
+<div align=center>
+<h3><strong>A simple, cross-platform, enterprise-level desktop software development framework</strong></h3>
+</div>
+<br>
 
-- 为什么使用？桌面软件（办公方向、 个人工具），仍然是未来十几年PC端需求之一，提高工作效率
-- 愿景：所有开发者都能学会桌面软件研发
-- gitee：https://gitee.com/wallace5303/electron-egg
-- github：https://github.com/wallace5303/electron-egg
-- 🏆 码云最有价值开源项目
-    ![](https://kaka996.coding.net/p/resource/d/tx-resource/git/raw/master/img/electron-egg/ee-zhengshu-1.png)    
+## 🌏 [English](https://www.yuque.com/u34495/ee-doc) | [中文](https://www.yuque.com/u34495/mivcfg)
 
-## 文档
-- [教程文档](https://www.yuque.com/u34495/mivcfg)
-- 文档进行了重新编写，更加直观，一定要看！！！
+## 📋 Introduction
+- 🍩 **Why?** desktop software ( office direction , personal tools ), still Yes PC in the next ten years one of the requirements is to improve work efficiency
+- 🍉 **Simple：** just understand JavaScript
+- 🍑 **Vision：** all developers can learn how to develop desktop software
+- 🍰 **Gitee：** https://gitee.com/wallace5303/electron-egg **2000+**
+- 🍨 **Github：** https://github.com/wallace5303/electron-egg **500+**
+- 🏆 most valuable open source project
+    ![](https://wallace5303.gitee.io/ee/images/electron-egg/ee-zs.png)    
 
-## 特性
-1. 跨平台：一套代码，可以打包成windows版、Mac版、Linux版
-2. 简单高效：只需学习 js 语言，同时支持vue、react、ejs等前端技术
-3. 前端独立：理论上支持任何前端技术，编写出精美的UI效果
-4. 工程化：可以用服务端的开发思维，来编写桌面软件
-5. 高性能：事件驱动、非阻塞式IO
-6. 功能丰富：前端、服务端的技术场景等
-7. 功能demo：桌面软件常见功能，后续逐步集成或提供demo
-8. 更多功能请看文档
+## ❤️ Support 
+### if it is useful to you, please help me order one⭐️, support developers, thank you very much 
 
-## 使用场景
+## 📚 Document
+- [Tutorial document](https://www.yuque.com/u34495/ee-doc)
 
-### 1. 常规桌面软件
-- windows平台
+## 📦 Features
+1. 🍄 **Cross platform：** a set of code that can be packaged into windows, Mac, and Linux.
+2. 🌹  **Simple and efficient：** you only need to learn the js language and support front-end technologies such as vue, react, and html. 
+3. 🌱 **Frontend independence：**  theoretically supports any front-end technology to write exquisite UI effects. 
+4. 🌴 **Engineering：** you can use the development thinking of the server to write desktop software.
+5. 🍁 **High performance：** Event-driven, non-blocking I/O.
+6. 🌷 **Features：** Front-end and server-side technical scenarios.
+7. 🌰 **Security：** supports bytecode encryption and compression obfuscation encryption. 
+7. 💐 **Demo：** common functions of desktop software, which will be gradually integrated or provided in the future. 
 
-    ![](https://kaka996.coding.net/p/resource/d/tx-resource/git/raw/master/img/electron-egg/home.png)
+## ✈️ Usage scenario
 
-- macOS平台    
-    ![](https://kaka996.coding.net/p/resource/d/tx-resource/git/raw/master/img/electron-egg/mac-socket.png)
+### 1. 🚀 General desktop software
+- 🚖 windows
 
-- linux平台 (ubuntu)
-    ![](https://kaka996.coding.net/p/resource/d/tx-resource/git/raw/master/img/electron-egg/ubuntu-db.png)
+    ![](https://wallace5303.gitee.io/ee/images/electron-egg/home.png)
 
-### 2. vue、react、angular、web 转换成桌面软件
-- vue-ant-design（本地）
+- 🚍 macOS   
+    ![](https://wallace5303.gitee.io/ee/images/electron-egg/mac-socket.png)
 
-    ![](https://kaka996.coding.net/p/resource/d/tx-resource/git/raw/master/img/electron-egg/vue-antd.png)
+- 🚔 linux (ubuntu)
+    ![](https://wallace5303.gitee.io/ee/images/electron-egg/ubuntu-db.png)
 
-- Youtube（web项目地址）
+### 🚐 2. Convert vue, react, angular, and web into desktop software 
+- 🚙 vue-ant-design（local）
 
-    ![](https://kaka996.coding.net/p/resource/d/tx-resource/git/raw/master/img/electron-egg/youtub.png)
+    ![](https://wallace5303.gitee.io/ee/images/electron-egg/vue-antd.png)
 
-### 3. 游戏（h5相关技术开发）
-- 忍者100层
+- 🚙 ZenTao（web）
 
-    ![](https://kaka996.coding.net/p/resource/d/tx-resource/git/raw/master/img/electron-egg/ee_game_1.png)
+    ![](https://wallace5303.gitee.io/ee/images/electron-egg/ee-project-7.png)
+
+### 🚂 3. Games (h5 related technology development) 
+- 🚊 ninja layer 100
+
+    ![](https://wallace5303.gitee.io/ee/images/electron-egg/ee_game_1.png)
 
 
-## 开始使用
+## 📒 Getting Started 
 
-- [安装文档](https://www.yuque.com/u34495/mivcfg/qo4uqg)
+- ✒️ [Installation documentation](https://www.yuque.com/u34495/ee-doc/ltgte9)
     
-## 项目案例
+## 🐶 Project case
+- 🐸 LOL assistant
+    ![](https://wallace5303.gitee.io/ee/images/electron-egg/serendipity/lol-zhanji.png)
+- [more](https://www.yuque.com/u34495/ee-doc/ep4otg)
+- if you want to show the project, please contact me (qq: 530353222) this case document has certain traffic
 
-- [查看](https://www.yuque.com/u34495/mivcfg/ep4otg)
+## 💬 discussion
+1. [discussion](https://www.yuque.com/u34495/ee-doc/gg691g)
 
-## 交流
-1. qq群：735532437
+## 🌐 core package ee-core
+ee-core：[https://github.com/wallace5303/ee-core](https://github.com/wallace5303/ee-core)
 
-## 关于pr
-请前往[GitHub项目](https://github.com/wallace5303/electron-egg)提pr（避免代码同步后，pr被覆盖掉），感谢！
-
-地址：https://github.com/wallace5303/electron-egg
-
-## 您的star，是我的动力，感谢支持
-![](https://whnb.wang/stars/wallace5303/electron-egg)
 
 
 

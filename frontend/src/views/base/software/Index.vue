@@ -7,7 +7,7 @@
       <p/>
       <span class="sub-content">
         注：请先将【powershell.exe】复制到【electron-egg/build/extraResources】目录中
-      </span> 
+      </span>
     </div>  
     <div class="one-block-2">
       <a-list bordered :data-source="data">
@@ -40,7 +40,7 @@ export default {
   methods: {
     openSoft (id) {
       const self = this;   
-      this.$ipcCall(ipcApiRoute.openSoftware, id).then(result => {
+      this.$ipcInvoke(ipcApiRoute.openSoftware, id).then(result => {
         if (!result) {
           self.$message.error('程序不存在');
         }

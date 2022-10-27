@@ -1,9 +1,11 @@
 'use strict';
 
 const dayjs = require('dayjs');
+const path = require('path');
 
 /**
  * 默认配置
+ * @see https://www.yuque.com/u34495/mivcfg/guk1x0
  */
 module.exports = (appInfo) => {
   /**
@@ -12,7 +14,7 @@ module.exports = (appInfo) => {
    **/
   const config = {};
 
-  /* 开发模式配置 */
+  /* 应用模式配置 */
   config.developmentMode = {
     default: 'vue',
     mode: {
@@ -23,20 +25,27 @@ module.exports = (appInfo) => {
       react: {
         hostname: 'localhost',
         port: 3000
-      }
+      },
+      html: {
+        hostname: 'localhost',
+        indexPage: 'index.html'
+      },
     }
   };
 
   /* 开发者工具 */
   config.openDevTools = false;
 
-  /* 应用程序顶部菜单 */
-  config.openAppMenu = true;
+  /**
+   * 应用程序顶部菜单
+   * boolean | string
+   * true, false, 'dev-show'(dev环境显示，prod环境隐藏)
+   */
+  config.openAppMenu = 'dev-show';
 
-  /* 加载loading页 */
-  config.loadingPage = true;
-
-  /* 主窗口 */
+  /**
+   * 主窗口
+   */
   config.windowsOption = {
     width: 980,
     height: 650,
@@ -44,10 +53,13 @@ module.exports = (appInfo) => {
     minHeight: 650,
     webPreferences: {
       //webSecurity: false,
-      contextIsolation: false, // 设置此项为false后，才可在渲染进程中使用electron api
+      contextIsolation: false, // false->可在渲染进程中使用electronApi，true->需要bridge.js(contextBridge)
       nodeIntegration: true,
+      //preload: path.join(appInfo.baseDir, 'preload', 'bridge.js'),
     },
     frame: true,
+    show: true,
+    //backgroundColor: '#000000'
     //titleBarStyle: 'hidden'
   };
 
@@ -63,9 +75,58 @@ module.exports = (appInfo) => {
     url: 'https://discuz.chat/' // Any web url
   };
 
-  /* web渲染服务 */
-  config.webServer = {
-    port: 7068
+  /* 内置socket服务 */
+  config.socketServer = {
+    enable: false, // 是否启用
+    port: 7070, // 默认端口（如果端口被使用，则随机获取一个）
+    path: "/socket.io/", // 默认路径名称
+    connectTimeout: 45000, // 客户端连接超时时间
+    pingTimeout: 30000, // 心跳检测超时时间
+    pingInterval: 25000, // 心跳检测间隔
+    maxHttpBufferSize: 1e8, // 每条消息的数据最大值 1M
+    transports: ["polling", "websocket"], // http轮询和websocket
+    cors: {
+      origin: true, // http协议时，要设置允许跨域
+    }
+  };
+
+  /* 内置http服务 */
+  config.httpServer = {
+    enable: false, // 是否启用
+    https: {
+      enable: false, 
+      key: '/public/ssl/localhost+1.key', // key文件
+      cert: '/public/ssl/localhost+1.pem' // cert文件
+    },
+    port: 7071, // 默认端口（如果端口被使用，则随机获取一个）
+    cors: {
+      origin: "*" // 跨域
+    },
+    body: {
+      multipart: true,
+      formidable: {
+        keepExtensions: true
+      }
+    },
+    filterRequest: {
+      uris:  [
+        'favicon.ico'
+      ],
+      returnData: '' // 任何数据类型
+    }
+  };
+
+  /* 主进程 */
+  config.mainServer = {
+    host: '127.0.0.1',
+    port: 7072, // 默认端口（如果端口被使用，则随机获取一个）
+  }; 
+
+  /**
+   * 硬件加速
+   */
+  config.hardGpu = {
+    enable: false
   };
 
   /* 应用自动升级 (可选) */

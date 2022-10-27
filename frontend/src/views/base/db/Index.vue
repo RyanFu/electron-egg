@@ -2,19 +2,19 @@
   <div id="app-base-db">
     <div class="one-block-1">
       <span>
-        1. 本地数据库
+        1. LowDB本地数据库
       </span>
     </div>  
     <div class="one-block-2">
       <a-row>
         <a-col :span="8">
-          • LowDB本地JSON数据库
+          • 小数据量: 0~100M(单库)
         </a-col>
         <a-col :span="8">
-          • 可使用lodash语法
+          • json数据库
         </a-col>
         <a-col :span="8">
-          
+          • 兼容lodash语法
         </a-col>
       </a-row>
     </div>
@@ -156,7 +156,7 @@ export default {
       const params = {
         action: 'all',
       }
-      this.$ipcCall(ipcApiRoute.dbOperation, params).then(res => {
+      this.$ipcInvoke(ipcApiRoute.dbOperation, params).then(res => {
         console.log('res:', res);
         if (res.all_list.length == 0) {
           return false;
@@ -180,8 +180,7 @@ export default {
       if (ac == 'add' && this.name.length == 0) {
         self.$message.error(`请填写数据`);
       }
-
-      this.$ipcCall(ipcApiRoute.dbOperation, params).then(res => {
+      this.$ipcInvoke(ipcApiRoute.dbOperation, params).then(res => {
         console.log('res:', res);
         if (ac == 'get') {
           if (res.result.length == 0) {
@@ -191,6 +190,7 @@ export default {
           self.userList = res.result;
         }
         if (res.all_list.length == 0) {
+          self.all_list = ['空'];
           return;
         }
         self.all_list = res.all_list;

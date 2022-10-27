@@ -8,7 +8,7 @@
       <div class="logo">
         <img class="pic-logo" src="~@/assets/logo.png">
       </div>
-      <a-menu class="menu-item" theme="light" mode="inline" :default-selected-keys="['menu_1']" @click="menuHandle">
+      <a-menu class="menu-item" theme="light" mode="inline" :default-selected-keys="[default_key]" @click="menuHandle">
         <a-menu-item v-for="(menuInfo, index) in menu" :key="index">
           <a-icon :type="menuInfo.icon" />
           {{ menuInfo.title }}
@@ -28,29 +28,33 @@ export default {
   data() {
     return {
       collapsed: true,
+      default_key: 'menu_1',
+      current: '',
       menu: {
         'menu_1' : {
           icon: 'home',
-          title: '功能',
-          pageName: 'BaseIndex',
+          title: '框架',
+          pageName: 'Base',
           params: {},
         },
         'menu_2' : {
-          icon: 'profile',
+          icon: 'desktop',
           title: '其它',
-          pageName: 'OtherIndex',
+          pageName: 'Other',
           params: {},
-        }
+        },              
       }
     };
   },
-  created () {},
+  created () {
+  },
   mounted () {
-    this.menuHandle({key: 'menu_1'})
+    this.menuHandle()
   },
   methods: {
-    menuHandle (item) {
-      const linkInfo = this.menu[item.key]
+    menuHandle (e) {
+      this.current = e ? e.key : this.default_key;
+      const linkInfo = this.menu[this.current]
       console.log('[home] load page:', linkInfo.pageName);
       this.$router.push({ name: linkInfo.pageName, params: linkInfo.params})
     },
